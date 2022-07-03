@@ -58,3 +58,27 @@ class SignVerify(BaseModel):
 
 class FaceExpress(BaseModel):
     mood: str
+
+class MrzReader(BaseModel):
+    last_name: str
+    first_name: str
+    country_code: str
+    country : str
+    nationality : str
+    number : str
+    sex: str
+    # valid_score : str
+
+#ID Extraction
+class Feild(BaseModel):
+    data: str
+    confidence:int
+
+class IdExtract(BaseModel):
+    name: Feild
+    dob: Feild
+    id_no: Feild
+    extract_data: Optional[str]=None
+
+class OcrExtract(BaseModel):
+    extract_data:str

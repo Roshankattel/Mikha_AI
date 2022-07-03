@@ -1,26 +1,21 @@
-from fastapi import APIRouter
 from typing import Optional
-from fastapi import HTTPException, File, Form,status
+from fastapi import HTTPException, File, Form,status,APIRouter
 from fastapi.datastructures import UploadFile
-import schemas
-import utils
+from .. import schemas,utils
 import glob
 
-from sign_verify.signver.src import sign_process
+from ..sign_verify.signver.src import sign_process
 
-from config import settings
+from ..config import settings
 
-INPUT_FILE = f"{settings.sign_input_path}"
+INPUT_FILE = f"{settings.sign_file_input_path}"
 EXTRACT_SIGN = f"{settings.sign_extract_path}"
 INPUT_SIGN = f"{settings.sign_input_path}"
 REFERENCE_SIGN = f"{settings.sign_reference_path}"
-
 router = APIRouter(
     prefix="/signature",
     tags=['Signature Verification']
 )
-
-
 
 @router.post("/detector", response_model=schemas.SignDetect, status_code=status.HTTP_200_OK)
 async def detect(image: UploadFile = File(...)):
@@ -45,7 +40,7 @@ async def extract(image: UploadFile = File(...), clean: Optional[bool] = True):
 async def compare(imagea: UploadFile = File(...), imageb: UploadFile = File(...), clean: Optional[bool] = False):
     utils.save_image(INPUT_SIGN+imagea.filename, imagea.file)
     utils.save_image(INPUT_SIGN+imageb.filename, imageb.file)
-    sim, simScore = compare(INPUT_SIGN+imagea.filename, INPUT_SIGN+imageb.filename, clean)
+    sim, simScore = sign_process.compare(INPUT_SIGN+imagea.filename, INPUT_SIGN+imageb.filename, clean)
     return {"sim_score": float(simScore), "similar": sim}
 
 
@@ -53,7 +48,6 @@ async def compare(imagea: UploadFile = File(...), imageb: UploadFile = File(...)
 async def check(image: UploadFile = File(...), id: str = Form(...), clean: Optional[bool] = False):
     utils.save_image(INPUT_SIGN+image.filename, image.file)
     originalImagePath = (glob.glob((f"{REFERENCE_SIGN}{id}*")))
-
     if not originalImagePath:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Image not found")
 
@@ -70,14 +64,18 @@ async def check(image: UploadFile = File(...), id: str = Form(...), clean: Optio
 async def verify(image: UploadFile = File(...), id: str = Form(...), clean: Optional[bool] = True):
     utils.save_image(INPUT_FILE+image.filename, image.file)
     originalImagePath = (glob.glob((f"{REFERENCE_SIGN}{id}*")))
-
     if not originalImagePath:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Image not found")
 
     if (len(originalImagePath) > 1):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Multiple Reference Image found")
+    print(originalImagePath[0])
 
     predScore =sign_process.extract_sign(image.filename, False)
+    
+    if (predScore==0):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Signature not found in Image")
+
     sim, simScore = sign_process.compare(
         EXTRACT_SIGN+image.filename, originalImagePath[0], clean)
     encodedRefImg = utils.img_to_base64(originalImagePath[0])

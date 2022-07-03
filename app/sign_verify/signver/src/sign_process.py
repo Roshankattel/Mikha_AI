@@ -4,20 +4,20 @@ import matplotlib.pyplot as plt
 import cv2
 from PIL import Image
 
-from config import settings
+from ....config import settings
 
-INPUT_FILE = f"{settings.sign_input_path}"
+INPUT_FILE = f"{settings.sign_file_input_path}"
 EXTRACT_SIGN = f"{settings.sign_extract_path}"
 INPUT_SIGN = f"{settings.sign_input_path}"
 REFERENCE_SIGN = f"{settings.sign_reference_path}"
 
-from sign_verify.signver.detector import Detector
-from sign_verify.signver.cleaner import Cleaner
-from sign_verify.signver.extractor import MetricExtractor
-from sign_verify.signver.matcher import Matcher
-from sign_verify.signver.utils import data_utils
-from sign_verify.signver.utils.data_utils import  resnet_preprocess
-from sign_verify.signver.utils.visualization_utils import  get_image_crops
+from ..detector import Detector
+from ..cleaner import Cleaner
+from ..extractor import MetricExtractor
+from ..matcher import Matcher
+from ..utils import data_utils
+from ..utils.data_utils import  resnet_preprocess
+from ..utils.visualization_utils import  get_image_crops
 
 detector_model_path = f"{settings.sign_detector_model_path}"
 detector = Detector()
@@ -38,7 +38,8 @@ def covert_greyscale(imgPath):
 
 
 def detect_sign(imgName):
-    imgPath = INPUT_FILE + imgName
+    imgPath = f"{INPUT_FILE}{imgName}"
+    print(imgPath)
     covert_greyscale(imgPath)
     invertedImageNp = data_utils.img_to_np_array(imgPath, invert_image=True)
     imgTensor = tf.convert_to_tensor(invertedImageNp)

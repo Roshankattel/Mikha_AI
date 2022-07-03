@@ -6,9 +6,9 @@ import numpy as np
 import torch.nn.functional as F
 
 
-from face_spoof.src.model_lib.MiniFASNet import MiniFASNetV1, MiniFASNetV2, MiniFASNetV1SE, MiniFASNetV2SE
-from face_spoof.src.data_io import transform as trans
-from face_spoof.src.utility import get_kernel, parse_model_name
+from ...face_spoof.src.model_lib.MiniFASNet import MiniFASNetV1, MiniFASNetV2, MiniFASNetV1SE, MiniFASNetV2SE
+from ...face_spoof.src.data_io import transform as trans
+from ...face_spoof.src.utility import get_kernel, parse_model_name
 
 MODEL_MAPPING = {
     'MiniFASNetV1': MiniFASNetV1,

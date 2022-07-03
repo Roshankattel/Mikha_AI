@@ -2,7 +2,16 @@ import base64
 import shutil
 import urllib.request
 import os
+import cv2
 
+
+def grey_scale(file):
+    img = cv2.imread(file)
+    return cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+def img_process(imgPath):
+    gray = grey_scale(imgPath)
+    return cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
 
 def img_to_base64(imageFullPath):
     with open(imageFullPath, "rb") as img_file:

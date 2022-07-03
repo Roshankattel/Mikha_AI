@@ -8,7 +8,7 @@ from six import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 
 
-from sign_verify.signver.utils import data_utils
+from . import data_utils
 
 
 def make_square(image_np_array, min_size=100, fill_color=(255, 255, 255, 0)):

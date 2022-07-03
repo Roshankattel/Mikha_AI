@@ -1,3 +1,3 @@
-from sign_verify.signver.detector.detector import Detector
+from .detector import Detector
 
 __all__ = ["Detector"]

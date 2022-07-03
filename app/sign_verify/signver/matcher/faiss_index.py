@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-from sign_verify.signver.utils.data_utils import mkdir, load_json_file, save_json_file
+from ..utils.data_utils import mkdir, load_json_file, save_json_file
 import logging
 import faiss
 import os

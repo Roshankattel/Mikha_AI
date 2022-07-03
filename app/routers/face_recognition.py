@@ -2,11 +2,10 @@ from typing import Optional
 from fastapi import APIRouter, File, Form, HTTPException, Depends, status
 from fastapi.datastructures import UploadFile
 import glob
-import schemas
-import utils
-from face_recogn.src import face_details
+from .. import schemas,utils
+from ..face_recogn.src import face_details
 # import auth
-from config import settings
+from ..config import settings
 
 ORIGINAL_IMAGE = f"{settings.face_original_path}"
 VERIFY_IMAGE = f"{settings.face_verify_path}"
@@ -45,7 +44,7 @@ async def verify_ID(image: UploadFile=File(...), id: str=Form(...), facial_landm
                             detail="Invalid Image!, Please make sure face is visible in the image")
 
     originalImagePath=glob.glob((f"{ORIGINAL_IMAGE}{id}*"))
-
+    print(originalImagePath[0])
     if not originalImagePath:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Reference Image not found")
 

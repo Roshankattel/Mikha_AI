@@ -1,7 +1,7 @@
 
 import tensorflow as tf
 from scipy.spatial.distance import cosine
-from sign_verify.signver.matcher.faiss_index import FaissIndex
+from .faiss_index import FaissIndex
 
 
 class Matcher():

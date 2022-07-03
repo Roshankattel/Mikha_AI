@@ -9,13 +9,12 @@ from fastapi import File,  HTTPException, APIRouter
 from fastapi.datastructures import UploadFile
 
 
-import schemas
-import utils
-from config import settings
+from .. import schemas,utils
+from ..config import settings
 
-from face_spoof.src.anti_spoof_predict import AntiSpoofPredict
-from face_spoof.src.generate_patches import CropImage
-from face_spoof.src.utility import parse_model_name
+from ..face_spoof.src.anti_spoof_predict import AntiSpoofPredict
+from ..face_spoof.src.generate_patches import CropImage
+from ..face_spoof.src.utility import parse_model_name
 warnings.filterwarnings('ignore')
 
 
@@ -123,7 +122,7 @@ async def check(image: UploadFile = File(...), result_img: Optional[bool] = Fals
         default=image.filename,
         help="image used to test")
     print(parser)
-    args = parser.parse_args()
+    args = parser.parse_args(args=[])
     test_result = test(args.image_name, args.model_dir, args.device_id)
     if not test_result["img_valid"]:
         raise HTTPException(

@@ -1,6 +1,6 @@
 from torch import nn
 import torch.nn.functional as F
-from app.face_spoof.src.model_lib.MiniFASNet import MiniFASNetV1, MiniFASNetV2, MiniFASNetV1SE, MiniFASNetV2SE
+from .....app.face_spoof.src.model_lib.MiniFASNet import MiniFASNetV1, MiniFASNetV2, MiniFASNetV1SE, MiniFASNetV2SE
 
 
 class FTGenerator(nn.Module):

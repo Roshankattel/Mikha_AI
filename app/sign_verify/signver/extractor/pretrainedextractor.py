@@ -1,4 +1,4 @@
-from sign_verify.signver.extractor import BaseExtractor
+from . import BaseExtractor
 
 
 class PretrainedExtractor(BaseExtractor):

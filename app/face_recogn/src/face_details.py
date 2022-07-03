@@ -1,10 +1,9 @@
-from turtle import distance
 import face_recognition
 import cv2
 from PIL import Image, ImageDraw
 import numpy as np
 import math
-import utils
+from ... import utils
 import base64
 import mediapipe as mp
 
@@ -168,3 +167,5 @@ def face_emotion(imagPath):
     probablities = expanded / expanded.sum()
     prob = np.squeeze(probablities)
     return emotions[prob.argmax()]
+
+
